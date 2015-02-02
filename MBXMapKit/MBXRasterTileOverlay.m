@@ -536,9 +536,9 @@ typedef NS_ENUM(NSUInteger, MBXRenderCompletionState) {
     void(^workerBlock)(NSData *,NSError **) = ^(NSData *data, NSError **error){
 
 #if TARGET_OS_IPHONE
-        point.image = [[UIImage alloc] initWithData:data scale:[[UIScreen mainScreen] scale]];
+        point.markerImage = [[UIImage alloc] initWithData:data scale:[[UIScreen mainScreen] scale]];
 #else
-        point.image = [[NSImage alloc] initWithData:data];
+        point.markerImage = [[NSImage alloc] initWithData:data];
 #endif
 
         // Add the annotation for this marker icon to the collection of point annotations

@@ -21,6 +21,16 @@
 		DDB97D07199D72A5006EC3A6 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB97D06199D72A5006EC3A6 /* libsqlite3.dylib */; };
 		DDC92F961A1544CD0082BDE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDC92F951A1544CD0082BDE8 /* Images.xcassets */; };
 		DDC92FC61A158CFB0082BDE8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC92FC51A158CFB0082BDE8 /* LaunchScreen.xib */; };
+		EFD04C921A67C87300FDB70B /* home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C8F1A67C87300FDB70B /* home@2x.png */; };
+		EFD04C931A67C87300FDB70B /* home@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C901A67C87300FDB70B /* home@1x.png */; };
+		EFD04C941A67C87300FDB70B /* home@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C911A67C87300FDB70B /* home@3x.png */; };
+		EFD04C971A67E2C300FDB70B /* HomeAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFD04C961A67E2C300FDB70B /* HomeAnnotationView.m */; };
+		EFD04C991A67F78F00FDB70B /* defoult.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C981A67F78F00FDB70B /* defoult.jpg */; };
+		EFD04C9D1A67FC3800FDB70B /* next@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C9A1A67FC3800FDB70B /* next@1x.png */; };
+		EFD04C9E1A67FC3800FDB70B /* next@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C9B1A67FC3800FDB70B /* next@3x.png */; };
+		EFD04C9F1A67FC3800FDB70B /* next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C9C1A67FC3800FDB70B /* next@2x.png */; };
+		EFD04CD71A69484F00FDB70B /* SliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFD04CD61A69484F00FDB70B /* SliderViewController.m */; };
+		EFD04CD91A6955D900FDB70B /* opened.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04CD81A6955D900FDB70B /* opened.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +59,18 @@
 		DDB97D06199D72A5006EC3A6 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DDC92F951A1544CD0082BDE8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DDC92FC51A158CFB0082BDE8 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		EFD04C8F1A67C87300FDB70B /* home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@2x.png"; sourceTree = "<group>"; };
+		EFD04C901A67C87300FDB70B /* home@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@1x.png"; sourceTree = "<group>"; };
+		EFD04C911A67C87300FDB70B /* home@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@3x.png"; sourceTree = "<group>"; };
+		EFD04C951A67E2C300FDB70B /* HomeAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeAnnotationView.h; path = "MBXMapKit iOS/HomeAnnotationView.h"; sourceTree = "<group>"; };
+		EFD04C961A67E2C300FDB70B /* HomeAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeAnnotationView.m; path = "MBXMapKit iOS/HomeAnnotationView.m"; sourceTree = "<group>"; };
+		EFD04C981A67F78F00FDB70B /* defoult.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = defoult.jpg; sourceTree = "<group>"; };
+		EFD04C9A1A67FC3800FDB70B /* next@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next@1x.png"; sourceTree = "<group>"; };
+		EFD04C9B1A67FC3800FDB70B /* next@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next@3x.png"; sourceTree = "<group>"; };
+		EFD04C9C1A67FC3800FDB70B /* next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next@2x.png"; sourceTree = "<group>"; };
+		EFD04CD51A69484F00FDB70B /* SliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderViewController.h; sourceTree = "<group>"; };
+		EFD04CD61A69484F00FDB70B /* SliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderViewController.m; sourceTree = "<group>"; };
+		EFD04CD81A6955D900FDB70B /* opened.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = opened.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +105,14 @@
 		012A0D821909D3F6005B69D7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EFD04CD81A6955D900FDB70B /* opened.png */,
+				EFD04C9A1A67FC3800FDB70B /* next@1x.png */,
+				EFD04C9B1A67FC3800FDB70B /* next@3x.png */,
+				EFD04C9C1A67FC3800FDB70B /* next@2x.png */,
+				EFD04C981A67F78F00FDB70B /* defoult.jpg */,
+				EFD04C8F1A67C87300FDB70B /* home@2x.png */,
+				EFD04C901A67C87300FDB70B /* home@1x.png */,
+				EFD04C911A67C87300FDB70B /* home@3x.png */,
 				012A0D831909D3F6005B69D7 /* MBXMapKit iOS-Info.plist */,
 				012A0D841909D3F6005B69D7 /* InfoPlist.strings */,
 				012A0D871909D3F6005B69D7 /* main.m */,
@@ -122,6 +152,7 @@
 		DDD5905A17D7D086009291B8 = {
 			isa = PBXGroup;
 			children = (
+				EFD04CD41A69426A00FDB70B /* Tun-li */,
 				012A0D811909D3F6005B69D7 /* Sample App (iOS) */,
 				017F793B1909D1D200EF8AD1 /* MBXMapKit */,
 				DDB97D08199D72AB006EC3A6 /* Frameworks */,
@@ -135,6 +166,17 @@
 				012A0D7D1909D3F6005B69D7 /* MBXMapKit.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		EFD04CD41A69426A00FDB70B /* Tun-li */ = {
+			isa = PBXGroup;
+			children = (
+				EFD04C951A67E2C300FDB70B /* HomeAnnotationView.h */,
+				EFD04C961A67E2C300FDB70B /* HomeAnnotationView.m */,
+				EFD04CD51A69484F00FDB70B /* SliderViewController.h */,
+				EFD04CD61A69484F00FDB70B /* SliderViewController.m */,
+			);
+			name = "Tun-li";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,7 +211,7 @@
 				ORGANIZATIONNAME = MapBox;
 				TargetAttributes = {
 					012A0D7C1909D3F6005B69D7 = {
-						DevelopmentTeam = U8B2JGE4C6;
+						DevelopmentTeam = HZ942297N9;
 						SystemCapabilities = {
 							com.apple.iOS = {
 								enabled = 1;
@@ -201,11 +243,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFD04CD91A6955D900FDB70B /* opened.png in Resources */,
+				EFD04C9D1A67FC3800FDB70B /* next@1x.png in Resources */,
+				EFD04C991A67F78F00FDB70B /* defoult.jpg in Resources */,
+				EFD04C9E1A67FC3800FDB70B /* next@3x.png in Resources */,
 				012A0DAC1909D515005B69D7 /* Main_iPhone.storyboard in Resources */,
 				DDC92F961A1544CD0082BDE8 /* Images.xcassets in Resources */,
+				EFD04C941A67C87300FDB70B /* home@3x.png in Resources */,
 				012A0DAB1909D515005B69D7 /* Main_iPad.storyboard in Resources */,
 				012A0D861909D3F6005B69D7 /* InfoPlist.strings in Resources */,
+				EFD04C931A67C87300FDB70B /* home@1x.png in Resources */,
 				DDC92FC61A158CFB0082BDE8 /* LaunchScreen.xib in Resources */,
+				EFD04C921A67C87300FDB70B /* home@2x.png in Resources */,
+				EFD04C9F1A67FC3800FDB70B /* next@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,9 +287,11 @@
 				012A0DBA1909D5FC005B69D7 /* MBXOfflineMapDownloader.m in Sources */,
 				012A0DBB1909D5FC005B69D7 /* MBXPointAnnotation.m in Sources */,
 				012A0DBC1909D5FC005B69D7 /* MBXRasterTileOverlay.m in Sources */,
+				EFD04CD71A69484F00FDB70B /* SliderViewController.m in Sources */,
 				012A0D881909D3F6005B69D7 /* main.m in Sources */,
 				012A0DB21909D52E005B69D7 /* MBXViewController.m in Sources */,
 				012A0DB11909D52E005B69D7 /* MBXAppDelegate.m in Sources */,
+				EFD04C971A67E2C300FDB70B /* HomeAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
