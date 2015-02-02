@@ -6,37 +6,37 @@
 //
 
 #import "MBXViewController.h"
-#import "MBXMapKit.h"
+#import "HomeAnnotationView.h"
+#import "SliderViewController.h"
+//#import "MBXMapKit.h"
+
 
 @interface MBXViewController ()
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic) MBXRasterTileOverlay *rasterOverlay;
-@property (nonatomic) UIActionSheet *actionSheet;
 
-@property (weak, nonatomic) IBOutlet UIView *offlineMapProgressView;
-@property (weak, nonatomic) IBOutlet UIProgressView *offlineMapProgress;
-@property (weak, nonatomic) IBOutlet UIView *offlineMapDownloadControlsView;
-@property (weak, nonatomic) IBOutlet UIButton *offlineMapButtonHelp;
-@property (weak, nonatomic) IBOutlet UIButton *offlineMapButtonBegin;
-@property (weak, nonatomic) IBOutlet UIButton *offlineMapButtonCancel;
-@property (weak, nonatomic) IBOutlet UIButton *offlineMapButtonSuspendResume;
-@property (weak, nonatomic) IBOutlet UIView *removeOfflineMapsView;
+@property (strong, nonatomic) UIPageViewController *pageViewController;
+@property (strong, nonatomic) NSMutableArray *annotations;
+@property (nonatomic) BOOL isAnnotastionSelected;
 
-
-@property (nonatomic) BOOL viewHasFinishedLoading;
-@property (nonatomic) BOOL currentlyViewingAnOfflineMap;
+@property (nonatomic)  BOOL up;
 
 @end
 
 @implementation MBXViewController
 
+@synthesize annotations,isAnnotastionSelected;
+
+@synthesize up ;
 
 #pragma mark - Initialization
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //------------------------------------MapBox Initialization-----------------------------------------------------------------
 
     // Set the Mapbox access token for API access if on iOS 8+
     //
@@ -56,17 +56,10 @@
     //[urlCache removeAllCachedResponses];
     [NSURLCache setSharedURLCache:urlCache];
 
-    // Start with the offline map download progress and controls hidden (progress will be shownn from elsewhere as needed)
-    //
-    _offlineMapProgressView.hidden = YES;
-    _offlineMapDownloadControlsView.hidden = YES;
-    _removeOfflineMapsView.hidden = YES;
-
     // Let the shared offline map downloader know that we want to be notified of changes in its state. This will allow us to
     // update the download progress indicator and the begin/cancel/suspend/resume buttons
     //
-    MBXOfflineMapDownloader *sharedDownloader = [MBXOfflineMapDownloader sharedOfflineMapDownloader];
-    [sharedDownloader setDelegate:self];
+//    MBXOfflineMapDownloader *sharedDownloader = [MBXOfflineMapDownloader sharedOfflineMapDownloader];
 
     // Turn off distracting MKMapView features which aren't relevant to this demonstration
     _mapView.rotateEnabled = NO;
@@ -98,419 +91,347 @@
     // gets called to notify us that the raster tile overlay has finished asynchronously loading its metadata.
     //
     [_mapView addOverlay:_rasterOverlay];
-
-    // If there was a suspended offline map download, resume it...
-    // Note how the call above to initialize the shared map downloader happens before its delegate can be set. So now, in order
-    // to know whether there might be a suspended download which was restored from disk, we need to poll and invoke any
-    // necessary handler functions on our own.
-    //
-    if(sharedDownloader.state == MBXOfflineMapDownloaderStateSuspended)
-    {
-        [self offlineMapDownloader:sharedDownloader stateChangedTo:MBXOfflineMapDownloaderStateSuspended];
-        [self offlineMapDownloader:sharedDownloader totalFilesExpectedToWrite:sharedDownloader.totalFilesExpectedToWrite];
-        [self offlineMapDownloader:sharedDownloader totalFilesWritten:sharedDownloader.totalFilesWritten totalFilesExpectedToWrite:sharedDownloader.totalFilesExpectedToWrite];
-        [[MBXOfflineMapDownloader sharedOfflineMapDownloader] resume];
+    
+    //----------------------------------------------------------------------------------------------------------------------------------
+    
+    isAnnotastionSelected = NO;
+    
+    
+    NSDictionary *dic1 = @{ @"long":@40.19,
+                           @"lat":@44.29,
+                           @"homeImages":@[@"http://bostondesignguide.com/sites/default/files/styles/frontpage-slideshow/public/carter-and-company-microsite.jpg",
+                                      @"http://mosteleganthomes.com/wp-content/uploads/2013/03/Minimal-Home-Interior-Ideas.jpg",
+                                      @"http://bostondesignguide.com/sites/default/files/styles/frontpage-slideshow/public/now-interior-design-microsite.jpg"],
+                           @"markerImage":[UIImage imageNamed:@"home"]};
+    
+    NSDictionary *dic2 = @{ @"long":@40.22,
+                           @"lat":@44.25,
+                           @"homeImages":@[@"http://updatedhome.com/wp-content/uploads/2010/10/Modern-Designs-Interiors-Home-by-Paola-Lenti9.jpg",
+                                           @"http://st.houzz.com/simgs/74416c9b0091630c_4-5359/traditional-home-theater.jpg",
+                                           @"http://bostondesignguide.com/sites/default/files/styles/frontpage-slideshow/public/Barbara-Bahr-Sheehan-Barn-Wide--microsite.jpg"],
+                           @"markerImage":[UIImage imageNamed:@"home"]};
+    
+    NSDictionary *dic3 = @{ @"long":@40.35,
+                           @"lat":@44.8,
+                           @"homeImages":@[@"http://st.houzz.com/simgs/e5917f3601fed75c_4-5786/traditional-bedroom.jpg",
+                                           @"http://www.hotnick.com/wp-content/uploads/2014/10/Nail-Salon-Ideas1.jpg",
+                                           @"http://imgs.propguru.com/admin/knowledgebase/files/articleimgs/interior-design-ideas-for-indian-homes.jpg"],
+                           @"markerImage":[UIImage imageNamed:@"home"]};
+    
+    NSDictionary *dic4 = @{ @"long":@40.43,
+                           @"lat":@44.3,
+                           @"homeImages":@[@"http://cdn.homemakeover.in/wblob/544B94D4E1EB5D/26/1709/Kqt4c1_OvhCDo1WIVl9ASA/Master-Bedroom-Interior-Design-2-640x320.jpg",
+                                           @"http://cdn.homemakeover.in/wblob/544B94D4E1EB5D/26/1709/Kqt4c1_OvhCDo1WIVl9ASA/Master-Bedroom-Interior-Design-2-640x320.jpg" ],
+                           @"markerImage":[UIImage imageNamed:@"home"]};
+    
+    NSDictionary *dic5 = @{ @"long":@40.14,
+                           @"lat":@44.52,
+                           @"homeImages":@[@"http://2.bp.blogspot.com/-lzVbN6L7jRU/TZpoi3LYCGI/AAAAAAAAB7I/_vn0019R5V4/s640/Park+Ave+Apartment%252C+New+York9.jpg",
+                                           @"http://st.houzz.com/simgs/dd813e17009162fd_4-5343/contemporary-home-office.jpg",
+                                           @"http://3.bp.blogspot.com/-rvoqrbfC9T0/UqwXR7ehkUI/AAAAAAAAJTQ/R2RZnOJNF6Q/s1600/Traditional+Japanese+Interior+Home+Design.jpg"],
+                           @"markerImage":[UIImage imageNamed:@"home"]};
+    
+    NSDictionary *dic6 = @{ @"long":@40.32,
+                           @"lat":@44.5,
+                           @"homeImages":@[@"http://st.houzz.com/simgs/c8611f07009162d4_4-5333/contemporary-family-room.jpg" ],
+                           @"markerImage":[UIImage imageNamed:@"home"]};
+    
+    NSArray *data = @[dic1, dic2, dic3, dic4, dic5, dic6 ];
+    
+    annotations = [[NSMutableArray alloc]init];
+    
+    for (NSDictionary *annInfo in data) {
+        MBXPointAnnotation *ann = [[MBXPointAnnotation alloc]init];
+        ann.coordinate = CLLocationCoordinate2DMake([[annInfo objectForKey:@"long"] doubleValue], [[annInfo objectForKey:@"lat"] doubleValue]);
+        ann.markerImage = [annInfo objectForKey:@"markerImage"];
+        ann.homeImagesURL = [NSMutableArray arrayWithArray:[annInfo objectForKey:@"homeImages"]];
+        [_mapView addAnnotation:ann];
+        [annotations addObject:ann];
     }
+    
+
 }
-
-
-#pragma mark - Things for switching between maps
-
-- (UIActionSheet *)universalActionSheet
+#pragma mark - Build Swiped View
+-(void)buildImageViewFromDownWithAnnotation:(MBXPointAnnotation*)ann//-----------------------------------BUILD Page View Controller-------------
 {
-    // This is the list of options for selecting which map should be shown by the demo app
-    //
-    return [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"cancel" destructiveButtonTitle:nil otherButtonTitles:@"World baselayer, no Apple",@"World overlay, Apple satellite",@"World baselayer, Apple labels",@"Regional baselayer, no Apple",@"Regional overlay, Apple streets",@"Alpha overlay, Apple streets", @"Offline map downloader", @"Offline map viewer", @"Attribution",nil];
+    
+    CGFloat laynutyun = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat bardzrutyun = laynutyun/2;
+    
+    _pageViewController = [[UIPageViewController alloc]initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    
+    _pageViewController.dataSource = self;
+    _pageViewController.delegate = self;
+    
+    _pageViewController.view.frame = CGRectMake(0, self.view.frame.size.height, laynutyun, self.view.frame.size.height);
+    
+    
+    SliderViewController *initialViewController = [self viewControllerWithAnnotation:ann];
+    
+    NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
+    
+    [_pageViewController setViewControllers:viewControllers direction: UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    
+    //---------added panGestureRecognizer------
+    UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGestureRecognizerAction:)];
+    gesture.minimumNumberOfTouches = 1;
+    gesture.maximumNumberOfTouches = 1;
+    up = NO;
+    [_pageViewController.view addGestureRecognizer:gesture];
+    
+    
+    UIImageView *leftImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, bardzrutyun/2-20, 40, 40)];
+    leftImageView.image = [UIImage imageNamed:@"next"];
+    leftImageView.transform = CGAffineTransformMakeRotation(M_PI);
+    [_pageViewController.view addSubview:leftImageView];
+    
+    UIImageView *rightImageView = [[UIImageView alloc]initWithFrame:CGRectMake(laynutyun - 40, bardzrutyun/2-20, 40, 40)];
+    rightImageView.image = [UIImage imageNamed:@"next"];
+    [_pageViewController.view addSubview:rightImageView];
+    
+    [self.view addSubview:_pageViewController.view];
+    [_pageViewController didMoveToParentViewController:self];
+    
+    
+    
+    
+    
+    [UIView animateWithDuration:1 animations:^{
+        
+        CGRect rect = _pageViewController.view.frame;
+        rect.origin.y = [UIScreen mainScreen].bounds.size.height - bardzrutyun;
+        _pageViewController.view.frame = rect;
+    }];
+    
+    isAnnotastionSelected = YES;
+    
 }
 
-
-- (IBAction)iPadInfoButtonAction:(id)sender {
-    // This responds to the info button from the iPad storyboard getting pressed
-    //
-    if(_actionSheet.visible) {
-        [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
-        _actionSheet = nil;
-    } else {
-        _actionSheet = [self universalActionSheet];
-        [_actionSheet showFromRect:((UIButton *)sender).frame inView:self.view animated:YES];
-    }
-}
-
-
-- (IBAction)iPhoneInfoButtonAction:(id)sender {
-    // This responds to the info button from the iPhone storyboard getting pressed
-    //
-    if(_actionSheet.visible) {
-        [_actionSheet dismissWithClickedButtonIndex:_actionSheet.cancelButtonIndex animated:YES];
-        _actionSheet = nil;
-    } else {
-        _actionSheet = [self universalActionSheet];
-        [_actionSheet showFromRect:((UIButton *)sender).frame inView:self.view animated:YES];
-    }
-}
-
-
-- (void)resetMapViewAndRasterOverlayDefaults
+-(void)panGestureRecognizerAction:(UIPanGestureRecognizer*)pan//----------------------------------PAN Gesture Action----------------
 {
-    // Reset the MKMapView to some reasonable defaults.
-    //
-    _mapView.mapType = MKMapTypeStandard;
-    _mapView.scrollEnabled = YES;
-    _mapView.zoomEnabled = YES;
-    _offlineMapDownloadControlsView.hidden = YES;
-    _removeOfflineMapsView.hidden = YES;
-
-    // Make sure that any downloads (tiles, metadata, marker icons) which might be in progress for
-    // the old tile overlay are stopped, and remove the overlay and its markers from the MKMapView.
-    // The invalidation step is necessary to avoid the possibility of visual glitching or crashes due to
-    // delegate callbacks or asynchronous completion handlers getting invoked for downloads which might
-    // be still in progress.
-    //
-    [_mapView removeAnnotations:_rasterOverlay.markers];
-    [_mapView removeOverlay:_rasterOverlay];
-    [_rasterOverlay invalidateAndCancel];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    _currentlyViewingAnOfflineMap = NO;
-}
-
-
-#pragma mark - UIActionSheetDelegate protocol implementation
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    // This switches between maps in response to action sheet selections
-    //
-    switch(buttonIndex) {
-        case 0:
+    NSLog(@"class`` %hhd",[pan.view isMemberOfClass:[SliderViewController class]]);
+    
+    SliderViewController *view=(SliderViewController*)pan.view;
+    
+    NSLog(@"supercalss` %@", pan.view.superclass);
+    
+  //  UIImage *img = view.homeImageView.image;
+    
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:
         {
-            // OSM world map
-            [self resetMapViewAndRasterOverlayDefaults];
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"casser.koj2gpd5"];
-            _rasterOverlay.delegate = self;
-            [_mapView addOverlay:_rasterOverlay];
-            break;
-        }
-        case 1:
-        {
-            // OSM over Apple satellite
-            [self resetMapViewAndRasterOverlayDefaults];
-            _mapView.mapType = MKMapTypeSatellite;
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"justin.map-9tlo4knw" includeMetadata:YES includeMarkers:NO];
-            _rasterOverlay.delegate = self;
-            _rasterOverlay.canReplaceMapContent = NO;
-            [_mapView addOverlay:_rasterOverlay];
-            break;
-        }
-        case 2:
-        {
-            // Terrain under Apple labels
-            [self resetMapViewAndRasterOverlayDefaults];
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"justin.map-mf07hryq" includeMetadata:YES includeMarkers:NO];
-            _rasterOverlay.delegate = self;
-            [_mapView insertOverlay:_rasterOverlay atIndex:0 level:MKOverlayLevelAboveRoads];
-            break;
-        }
-        case 3:
-        {
-            // Tilemill bounded region (scroll & zoom limited to programmatic control only)
-            [self resetMapViewAndRasterOverlayDefaults];
-            _mapView.scrollEnabled = NO;
-            _mapView.zoomEnabled = NO;
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"justin.NACIS2012" includeMetadata:YES includeMarkers:NO];
-            _rasterOverlay.delegate = self;
-            [_mapView addOverlay:_rasterOverlay];
-            break;
-        }
-        case 4:
-        {
-            // Tilemill region over Apple
-            [self resetMapViewAndRasterOverlayDefaults];
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"justin.clp-2011-11-03-1200" includeMetadata:YES includeMarkers:NO];
-            _rasterOverlay.delegate = self;
-            _rasterOverlay.canReplaceMapContent = NO;
-            [_mapView addOverlay:_rasterOverlay];
-            break;
-        }
-        case 5:
-        {
-            // Tilemill transparent over Apple
-            [self resetMapViewAndRasterOverlayDefaults];
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"justin.pdx_meters" includeMetadata:YES includeMarkers:NO];
-            _rasterOverlay.delegate = self;
-            _rasterOverlay.canReplaceMapContent = NO;
-            [_mapView addOverlay:_rasterOverlay];
-            break;
-        }
-        case 6:
-        {
-            // Offline Map Downloader
-            [self resetMapViewAndRasterOverlayDefaults];
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithMapID:@"casser.koj2gpd5" includeMetadata:YES includeMarkers:YES];
-            _rasterOverlay.delegate = self;
-            [_mapView addOverlay:_rasterOverlay];
-            _offlineMapDownloadControlsView.hidden = NO;
-            [self offlineMapDownloader:[MBXOfflineMapDownloader sharedOfflineMapDownloader] stateChangedTo:[[MBXOfflineMapDownloader sharedOfflineMapDownloader] state]];
-            break;
-        }
-        case 7:
-        {
-            // Offline Map Viewer
-            [self resetMapViewAndRasterOverlayDefaults];
-            _currentlyViewingAnOfflineMap = YES;
-            MBXOfflineMapDatabase *offlineMap = [[[MBXOfflineMapDownloader sharedOfflineMapDownloader] offlineMapDatabases] lastObject];
-            if (offlineMap)
-            {
-                _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithOfflineMapDatabase:offlineMap];
-                _rasterOverlay.delegate = self;
-                _removeOfflineMapsView.hidden = NO;
-
-                [_mapView addOverlay:_rasterOverlay];
-            }
-            else
-            {
-                [[[UIAlertView alloc] initWithTitle:@"No Offline Maps"
-                                            message:@"No offline maps have been downloaded."
-                                           delegate:nil
-                                  cancelButtonTitle:nil
-                                  otherButtonTitles:@"OK", nil] show];
+            _mapView.hidden = NO;
+            for (UIScrollView *view in self.pageViewController.view.subviews) {
+                
+                if ([view isKindOfClass:[UIScrollView class]]) {
+                    
+                    view.scrollEnabled = YES;
+                }
             }
             break;
         }
-        case 8:
+        case UIGestureRecognizerStateChanged:
         {
-            // Show Attribution
-            [self attribution:_rasterOverlay.attribution];
-            break;
-        }
-    }
-}
-
-
-#pragma mark - AlertView stuff
-
-- (void)areYouSureYouWantToDeleteAllOfflineMaps
-{
-    NSString *title = @"Are you sure you want to remove your offline maps?";
-    NSString *message = @"This will permently delete your offline map data. This action cannot be undone.";
-    UIAlertView *areYouSure = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"No", @"Yes", nil];
-    [areYouSure show];
-}
-
-- (void)areYouSureYouWantToCancel
-{
-    NSString *title = @"Are you sure you want to cancel?";
-    NSString *message = @"Canceling an offline map download permanently deletes its partially downloaded map data. This action cannot be undone.";
-    UIAlertView *areYouSure = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"No", @"Yes", nil];
-    [areYouSure show];
-}
-
-- (void)attribution:(NSString *)attribution
-{
-    NSString *title = @"Attribution";
-    NSString *message = attribution;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Mapbox Details", @"OSM Details", nil];
-    [alert show];
-}
-
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if([alertView.title isEqualToString:@"Are you sure you want to cancel?"])
-    {
-        // For the are you sure you want to cancel alert dialog, do the cancel action if the answer was "Yes"
-        //
-        if([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Yes"])
-        {
-            [[MBXOfflineMapDownloader sharedOfflineMapDownloader] cancel];
-        }
-    }
-    else if([alertView.title isEqualToString:@"Are you sure you want to remove your offline maps?"])
-    {
-        // For are you sure you want to remove offline maps alert dialog, do the remove action if the answer was "Yes"
-        //
-        if([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Yes"])
-        {
-            if(_currentlyViewingAnOfflineMap)
+            if(pan.view.frame.origin.y<0)
             {
-                [self resetMapViewAndRasterOverlayDefaults];
-                _rasterOverlay = [[MBXRasterTileOverlay alloc] initWithOfflineMapDatabase:nil];
-                _rasterOverlay.delegate = self;
-                [_mapView addOverlay:_rasterOverlay];
+                break;
             }
-            for(MBXOfflineMapDatabase *db in [MBXOfflineMapDownloader sharedOfflineMapDownloader].offlineMapDatabases)
-            {
-                [[MBXOfflineMapDownloader sharedOfflineMapDownloader] removeOfflineMapDatabase:db];
-            }
-
+            
+            CGPoint translation = [pan translationInView:self.view];
+            NSLog(@"%f",translation.y);
+            pan.view.center = CGPointMake(pan.view.center.x,
+                                          pan.view.center.y + translation.y);
+            [pan setTranslation:CGPointMake(0, 0) inView:self.view];
+            break;
         }
-    }
-    else if([alertView.title isEqualToString:@"Attribution"])
-    {
-        // For the attribution alert dialog, open the Mapbox and OSM copyright pages when their respective buttons are pressed
-        //
-        if([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Mapbox Details"])
+        case UIGestureRecognizerStateEnded:
         {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.mapbox.com/tos/"]];
+            __block BOOL hidden = NO;
+            __block float bardzrutyun = self.view.frame.size.width/2;
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                //  (a > b) ? a : b
+                //     BOOL b =  up ? (pan.view.frame.origin.y+pan.view.frame.size.height > self.view.frame.size.height/2) : (pan.view.frame.origin.y > self.view.frame.size.height/2);
+                if( pan.view.frame.origin.y-20 > self.view.frame.size.height - bardzrutyun )
+                {
+                    up = NO;
+                    pan.view.frame = CGRectMake(0, self.view.frame.size.height, pan.view.frame.size.width, bardzrutyun);
+                    hidden = YES;
+                }else{
+                    if ( up ? (pan.view.frame.origin.y+bardzrutyun > self.view.frame.size.height/2) : (pan.view.frame.origin.y > self.view.frame.size.height/2) )
+                    {
+                        up = NO;
+                        pan.view.frame = CGRectMake(0, self.view.frame.size.height - bardzrutyun, pan.view.frame.size.width,pan.view.frame.size.height);
+                    }else{
+                        up = YES;
+                        pan.view.frame = CGRectMake(0, 0, pan.view.frame.size.width, self.view.frame.size.height);
+                        
+                    
+                    }
+                }
+            } completion:^(BOOL finished){
+                
+                if(up){
+                    _mapView.hidden = YES;
+                    for (UIScrollView *view in self.pageViewController.view.subviews) {
+                        
+                        if ([view isKindOfClass:[UIScrollView class]]) {
+                            
+                            view.scrollEnabled = NO;
+                        }
+                    }
+                }
+                
+                if(hidden){
+                    [self deletePageViewController];
+                }
+                    
+            }];
+            break;
         }
-        if([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"OSM Details"])
-        {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.openstreetmap.org/copyright"]];
-        }
-    }
-}
-
-
-
-
-#pragma mark - Offline map download controls
-
-- (IBAction)offlineMapButtonActionHelp:(id)sender
-{
-    NSString *title = @"Offline Map Downloader Help";
-    NSString *message = @"Arrange the map to show the region you want to download for offline use, then press [Begin]. [Suspend] stops the downloading in such a way that you can [Resume] it later. [Cancel] stops the download and discards the partially downloaded files.";
-    UIAlertView *help = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-    [help show];
-}
-
-
-- (IBAction)offlineMapButtonActionBegin:(id)sender
-{
-    [[MBXOfflineMapDownloader sharedOfflineMapDownloader] beginDownloadingMapID:_rasterOverlay.mapID mapRegion:_mapView.region minimumZ:_rasterOverlay.minimumZ maximumZ:MIN(16,_rasterOverlay.maximumZ)];
-}
-
-
-- (IBAction)offlineMapButtonActionCancel:(id)sender
-{
-    [self areYouSureYouWantToCancel];
-}
-
-- (IBAction)offlineMapButtonActionSuspendResume:(id)sender {
-    if ([[MBXOfflineMapDownloader sharedOfflineMapDownloader] state] == MBXOfflineMapDownloaderStateSuspended)
-    {
-        [[MBXOfflineMapDownloader sharedOfflineMapDownloader] resume];
-    }
-    else
-    {
-        [[MBXOfflineMapDownloader sharedOfflineMapDownloader] suspend];
-    }
-}
-
-
-- (IBAction)removeOfflineMapsButtonAction:(id)sender {
-    // Remove offline maps
-    //
-    [self areYouSureYouWantToDeleteAllOfflineMaps];
-}
-
-
-#pragma mark - MBXOfflineMapDownloaderDelegate implementation (progress indicator, etc)
-
-- (void)offlineMapDownloader:(MBXOfflineMapDownloader *)offlineMapDownloader stateChangedTo:(MBXOfflineMapDownloaderState)state
-{
-    switch (state)
-    {
-        case MBXOfflineMapDownloaderStateAvailable:
-            _offlineMapButtonBegin.enabled = YES;
-            _offlineMapButtonCancel.enabled = NO;
-            [_offlineMapButtonSuspendResume setTitle:@"Suspend" forState:UIControlStateNormal];
-            _offlineMapButtonSuspendResume.enabled = NO;
-            break;
-        case MBXOfflineMapDownloaderStateRunning:
-            _offlineMapButtonBegin.enabled = NO;
-            _offlineMapButtonCancel.enabled = YES;
-            [_offlineMapButtonSuspendResume setTitle:@"Suspend" forState:UIControlStateNormal];
-            _offlineMapButtonSuspendResume.enabled = YES;
-            break;
-        case MBXOfflineMapDownloaderStateCanceling:
-            _offlineMapButtonBegin.enabled = NO;
-            _offlineMapButtonCancel.enabled = NO;
-            [_offlineMapButtonSuspendResume setTitle:@"Suspend" forState:UIControlStateNormal];
-            _offlineMapButtonSuspendResume.enabled = NO;
-            break;
-        case MBXOfflineMapDownloaderStateSuspended:
-            _offlineMapButtonBegin.enabled = NO;
-            _offlineMapButtonCancel.enabled = YES;
-            [_offlineMapButtonSuspendResume setTitle:@"Resume" forState:UIControlStateNormal];
-            _offlineMapButtonSuspendResume.enabled = YES;
+        default:
             break;
     }
 }
 
 
-- (void)offlineMapDownloader:(MBXOfflineMapDownloader *)offlineMapDownloader totalFilesExpectedToWrite:(NSUInteger)totalFilesExpectedToWrite
+
+-(SliderViewController*)viewControllerWithAnnotation:(MBXPointAnnotation*)ann//-------------------Return PageViewControllers views------------------
 {
-    [_offlineMapProgress setProgress:0.0 animated:NO];
-    _offlineMapProgressView.hidden = NO;
+    SliderViewController *childView = [self.storyboard instantiateViewControllerWithIdentifier:@"childID"];
+    childView.annotation = ann;
+    return childView;
 }
 
 
-- (void)offlineMapDownloader:(MBXOfflineMapDownloader *)offlineMapDownloader totalFilesWritten:(NSUInteger)totalFilesWritten totalFilesExpectedToWrite:(NSUInteger)totalFilesExpectedToWrite
+
+#pragma mark - UIPageViewControllerDataSource protocol implementation
+
+
+-(void)deletePageViewController //--------------------------------------Delete PageViewController--------
 {
-    if (totalFilesExpectedToWrite != 0)
-    {
-        float progress = ((float)totalFilesWritten) / ((float)totalFilesExpectedToWrite);
-        [_offlineMapProgress setProgress:progress animated:YES];
+    up = NO;
+    [_pageViewController.view removeFromSuperview];
+    [_pageViewController removeFromParentViewController];
+    isAnnotastionSelected = NO;
+    
+    //------------deselect all selected annotation
+    for (MBXPointAnnotation *ann in _mapView.selectedAnnotations) {
+        [_mapView deselectAnnotation:ann animated:NO];
     }
+    
 }
 
-
-- (void)offlineMapDownloader:(MBXOfflineMapDownloader *)offlineMapDownloader didEncounterRecoverableError:(NSError *)error
-{
-    if(error.code == MBXMapKitErrorCodeURLSessionConnectivity)
-    {
-        // For some reason the offline map downloader wasn't able to make an HTTP connection. This probably means there is a
-        // network connectivity problem, so stop trying to download stuff. Please note how this is a minimal example which probably isn't
-        // very suitable to copy over into real apps. In contexts where there is a reasonable expectation of intermittent network
-        // connectivity, an approach with some capability to resume when the network re-connects would probably be better.
-        //
-        [offlineMapDownloader suspend];
-        NSLog(@"The offline map download was suspended in response to a network connectivity error: %@",error);
-    }
-    else if(error.code == MBXMapKitErrorCodeHTTPStatus)
-    {
-        // The HTTP status response for one of the urls requested by the offline map came back as something other than 200. This is
-        // not necessarily bad, but it probably indicates a problem with the parameters used to begin an offline map download. For
-        // example, you might have requested markers for a map that doesn't have any.
-        //
-        NSLog(@"The offline map downloader encountered an HTTP status error: %@",error);
-    }
-    else if(error.code == MBXMapKitErrorCodeOfflineMapSqlite)
-    {
-        // There was an sqlite error with the offline map. The most likely explanation is that the disk is running out of space.
-        //
-        NSLog(@"The offline map downloader encountered an sqlite error: %@",error);
-    }
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed{
+    
+    NSLog(@"Current Page = %@", pageViewController.viewControllers);
+    
+ //   SliderViewController *currentView = [pageViewController.viewControllers lastObject];
+    
+    
+    /*
+    if( ![_mapView viewForAnnotation:currentView.annotation].selected )
+        [_mapView selectAnnotation:currentView.annotation animated:NO];
+    */
+    
+    
+    
 }
 
-
-- (void)offlineMapDownloader:(MBXOfflineMapDownloader *)offlineMapDownloader didCompleteOfflineMapDatabase:(MBXOfflineMapDatabase *)offlineMapDatabase withError:(NSError *)error
+-(void)selectAnnotation:(MBXPointAnnotation*)ann//---------------Select Annotation when sliding---------
 {
-    _offlineMapProgressView.hidden = YES;
-
-    if(error)
+    if( ![_mapView viewForAnnotation:ann].selected )
     {
-        if(error.code == MBXMapKitErrorCodeDownloadingCanceled)
-        {
-            // Ignore cancellations,
-        }
-        else
-        {
-            // ...but pay attention to other errors
-            //
-            NSLog(@"The offline map download completed with an error: %@",error);
-        }
+        [_mapView selectAnnotation:ann animated:NO];
+        [_mapView mbx_setCenterCoordinate:ann.coordinate zoomLevel:[_mapView mbx_zoomLevel] animated:YES];
+        //change mapView region
     }
+    
+    
 }
 
+-(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+{
+    NSInteger index = [annotations indexOfObject:((SliderViewController*)viewController).annotation];
+    
+    
+    [self selectAnnotation:((SliderViewController*)viewController).annotation];
+        
+    if(index == 0){
+        return [self viewControllerWithAnnotation:[annotations lastObject]];//skzbic gnac verj
+    }
+    
+    index--;
+    
+    return [self viewControllerWithAnnotation:[annotations objectAtIndex:index]];
+}
+
+-(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+{
+    
+    NSInteger index = [annotations indexOfObject:((SliderViewController*)viewController).annotation];
+    
+
+    [self selectAnnotation:((SliderViewController*)viewController).annotation];
+
+    
+    index++;
+    
+    if(index == annotations.count){
+        return [self viewControllerWithAnnotation:[annotations firstObject]];//verjic gnac skizb
+    }
+    
+    return [self viewControllerWithAnnotation:[annotations objectAtIndex:index]];
+}
 
 #pragma mark - MKMapViewDelegate protocol implementation
+
+-(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view
+{
+    [(HomeAnnotationView*)view annotationDeselected];
+/*
+    BOOL isAllDeselected = YES;
+    for (MBXPointAnnotation *ann in _mapView.annotations) {
+        
+         UIImage *img = ((HomeAnnotationView*)[_mapView viewForAnnotation:ann]).imageView.image;
+        
+        if( [((HomeAnnotationView*)[_mapView viewForAnnotation:ann]).imageView.image isEqual:[UIImage imageNamed:@"opened.png"]] )
+        {
+         //   UIImage *img = ((HomeAnnotationView*)[_mapView viewForAnnotation:ann]).image;
+            isAllDeselected = NO;
+            break;
+        }
+    }
+    
+    
+    if(isAllDeselected)
+    {
+        [self deletePageViewController];
+    }
+    
+    */
+}
+
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
+{
+    
+    NSArray *arr =[[NSArray alloc]init];
+    arr = mapView.selectedAnnotations;
+    
+    if([view isKindOfClass:[HomeAnnotationView class]])
+    {
+        if(!isAnnotastionSelected){
+            [self buildImageViewFromDownWithAnnotation:(MBXPointAnnotation*)(view.annotation)];
+        }else{
+            
+            SliderViewController *initialViewController = [self viewControllerWithAnnotation:(MBXPointAnnotation*)(view.annotation)];
+            NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
+            [_pageViewController setViewControllers:viewControllers direction: UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+
+        }
+        [(HomeAnnotationView*)view annotationSelected];
+    }
+}
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
@@ -529,7 +450,16 @@
 {
     // This is boilerplate code to connect annotations with suitable views
     //
-    if ([annotation isKindOfClass:[MBXPointAnnotation class]])
+    
+    if (annotation == mapView.userLocation) {
+        return nil;
+    }
+    if ([annotation isKindOfClass:[MBXPointAnnotation class]]) {
+        HomeAnnotationView * ann = [[HomeAnnotationView alloc]initWithAnnotation:(MBXPointAnnotation*)annotation];
+        return ann;
+    }
+    
+    /*if ([annotation isKindOfClass:[MBXPointAnnotation class]])
     {
         static NSString *MBXSimpleStyleReuseIdentifier = @"MBXSimpleStyleReuseIdentifier";
         MKAnnotationView *view = [mapView dequeueReusableAnnotationViewWithIdentifier:MBXSimpleStyleReuseIdentifier];
@@ -537,10 +467,10 @@
         {
             view = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:MBXSimpleStyleReuseIdentifier];
         }
-        view.image = ((MBXPointAnnotation *)annotation).image;
-        view.canShowCallout = YES;
+        view.image = ((MBXPointAnnotation *)annotation).markerImage;
+   //     view.canShowCallout = YES;
         return view;
-    }
+    }*/
     return nil;
 }
 
@@ -557,7 +487,7 @@
     }
     else
     {
-        [_mapView mbx_setCenterCoordinate:overlay.center zoomLevel:overlay.centerZoom animated:NO];
+        [_mapView mbx_setCenterCoordinate:CLLocationCoordinate2DMake(40.3, 44.6) zoomLevel:7 animated:NO];
     }
 }
 

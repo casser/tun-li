@@ -27,9 +27,11 @@
 
 /** The image to show upon display of the corresponding auto-created `MKAnnotationView`. */
 #if TARGET_OS_IPHONE
-@property (nonatomic) UIImage *image;
+@property (nonatomic) UIImage *markerImage;
 #else
-@property (nonatomic) NSImage *image;
+@property (nonatomic) NSImage *markerImage;
 #endif
+
+@property (nonatomic) NSMutableArray *homeImagesURL;
 
 @end

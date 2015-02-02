@@ -10,6 +10,6 @@
 
 #import "MBXMapKit.h"
 
-@interface MBXViewController : UIViewController <UIActionSheetDelegate, MKMapViewDelegate, MBXRasterTileOverlayDelegate, MBXOfflineMapDownloaderDelegate, UIAlertViewDelegate>
+@interface MBXViewController : UIViewController <MKMapViewDelegate, MBXRasterTileOverlayDelegate, UIPageViewControllerDataSource,UIPageViewControllerDelegate>
 
 @end
