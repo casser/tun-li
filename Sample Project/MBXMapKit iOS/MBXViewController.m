@@ -39,7 +39,7 @@
     //------------------------------------MapBox Initialization-----------------------------------------------------------------
 
     // Set the Mapbox access token for API access if on iOS 8+
-    //
+    //.
     if ([[[UIDevice currentDevice] systemVersion] integerValue] >= 8)
     {
         [MBXMapKit setAccessToken:@"pk.eyJ1IjoiY2Fzc2VyIiwiYSI6IkNtZnBuaEUifQ.0FePYB2J3uyQz-F_d2CDqw"];
