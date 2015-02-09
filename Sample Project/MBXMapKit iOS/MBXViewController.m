@@ -8,6 +8,7 @@
 #import "MBXViewController.h"
 #import "HomeAnnotationView.h"
 #import "SliderViewController.h"
+#import "SWRevealViewController.h"
 //#import "MBXMapKit.h"
 
 
@@ -93,6 +94,7 @@
     [_mapView addOverlay:_rasterOverlay];
     
     //----------------------------------------------------------------------------------------------------------------------------------
+    [self configureSliderMenu];
     
     isAnnotastionSelected = NO;
     
@@ -151,6 +153,18 @@
     
 
 }
+
+-(void)configureSliderMenu
+{
+    SWRevealViewController *revealViewController = self.revealViewController;
+    if( revealViewController )
+    {
+        [self.sideBarButton setTarget:self.revealViewController];
+        [self.sideBarButton setAction:@selector(revealToggle:)];
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    }
+}
+
 #pragma mark - Build Swiped View
 -(void)buildImageViewFromDownWithAnnotation:(MBXPointAnnotation*)ann//-----------------------------------BUILD Page View Controller-------------
 {

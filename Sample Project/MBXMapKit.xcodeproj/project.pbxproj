@@ -21,6 +21,9 @@
 		DDB97D07199D72A5006EC3A6 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB97D06199D72A5006EC3A6 /* libsqlite3.dylib */; };
 		DDC92F961A1544CD0082BDE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDC92F951A1544CD0082BDE8 /* Images.xcassets */; };
 		DDC92FC61A158CFB0082BDE8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC92FC51A158CFB0082BDE8 /* LaunchScreen.xib */; };
+		EF02D1FF1A88D720008D4195 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF02D1FE1A88D720008D4195 /* SWRevealViewController.m */; };
+		EF02D2031A88DEE7008D4195 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF02D2021A88DEE7008D4195 /* MenuViewController.m */; };
+		EF02D2071A88E490008D4195 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF02D2061A88E490008D4195 /* HomeViewController.m */; };
 		EFD04C921A67C87300FDB70B /* home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C8F1A67C87300FDB70B /* home@2x.png */; };
 		EFD04C931A67C87300FDB70B /* home@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C901A67C87300FDB70B /* home@1x.png */; };
 		EFD04C941A67C87300FDB70B /* home@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C911A67C87300FDB70B /* home@3x.png */; };
@@ -59,6 +62,12 @@
 		DDB97D06199D72A5006EC3A6 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DDC92F951A1544CD0082BDE8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DDC92FC51A158CFB0082BDE8 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		EF02D1FD1A88D720008D4195 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		EF02D1FE1A88D720008D4195 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		EF02D2011A88DEE7008D4195 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		EF02D2021A88DEE7008D4195 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		EF02D2051A88E490008D4195 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		EF02D2061A88E490008D4195 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		EFD04C8F1A67C87300FDB70B /* home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@2x.png"; sourceTree = "<group>"; };
 		EFD04C901A67C87300FDB70B /* home@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@1x.png"; sourceTree = "<group>"; };
 		EFD04C911A67C87300FDB70B /* home@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@3x.png"; sourceTree = "<group>"; };
@@ -152,6 +161,8 @@
 		DDD5905A17D7D086009291B8 = {
 			isa = PBXGroup;
 			children = (
+				EF02D2041A88DEF4008D4195 /* ViewControllers */,
+				EF02D2001A88D72B008D4195 /* SWRevalLibreary */,
 				EFD04CD41A69426A00FDB70B /* Tun-li */,
 				012A0D811909D3F6005B69D7 /* Sample App (iOS) */,
 				017F793B1909D1D200EF8AD1 /* MBXMapKit */,
@@ -168,13 +179,33 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		EF02D2001A88D72B008D4195 /* SWRevalLibreary */ = {
+			isa = PBXGroup;
+			children = (
+				EF02D1FD1A88D720008D4195 /* SWRevealViewController.h */,
+				EF02D1FE1A88D720008D4195 /* SWRevealViewController.m */,
+			);
+			name = SWRevalLibreary;
+			sourceTree = "<group>";
+		};
+		EF02D2041A88DEF4008D4195 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				EF02D2051A88E490008D4195 /* HomeViewController.h */,
+				EF02D2061A88E490008D4195 /* HomeViewController.m */,
+				EFD04CD51A69484F00FDB70B /* SliderViewController.h */,
+				EFD04CD61A69484F00FDB70B /* SliderViewController.m */,
+				EF02D2011A88DEE7008D4195 /* MenuViewController.h */,
+				EF02D2021A88DEE7008D4195 /* MenuViewController.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
 		EFD04CD41A69426A00FDB70B /* Tun-li */ = {
 			isa = PBXGroup;
 			children = (
 				EFD04C951A67E2C300FDB70B /* HomeAnnotationView.h */,
 				EFD04C961A67E2C300FDB70B /* HomeAnnotationView.m */,
-				EFD04CD51A69484F00FDB70B /* SliderViewController.h */,
-				EFD04CD61A69484F00FDB70B /* SliderViewController.m */,
 			);
 			name = "Tun-li";
 			sourceTree = "<group>";
@@ -211,7 +242,7 @@
 				ORGANIZATIONNAME = MapBox;
 				TargetAttributes = {
 					012A0D7C1909D3F6005B69D7 = {
-						DevelopmentTeam = HZ942297N9;
+						DevelopmentTeam = FDGJL5PS7L;
 						SystemCapabilities = {
 							com.apple.iOS = {
 								enabled = 1;
@@ -289,9 +320,12 @@
 				012A0DBC1909D5FC005B69D7 /* MBXRasterTileOverlay.m in Sources */,
 				EFD04CD71A69484F00FDB70B /* SliderViewController.m in Sources */,
 				012A0D881909D3F6005B69D7 /* main.m in Sources */,
+				EF02D2031A88DEE7008D4195 /* MenuViewController.m in Sources */,
 				012A0DB21909D52E005B69D7 /* MBXViewController.m in Sources */,
+				EF02D1FF1A88D720008D4195 /* SWRevealViewController.m in Sources */,
 				012A0DB11909D52E005B69D7 /* MBXAppDelegate.m in Sources */,
 				EFD04C971A67E2C300FDB70B /* HomeAnnotationView.m in Sources */,
+				EF02D2071A88E490008D4195 /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
