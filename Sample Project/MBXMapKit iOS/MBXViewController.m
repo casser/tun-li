@@ -11,8 +11,9 @@
 #import "SWRevealViewController.h"
 //#import "MBXMapKit.h"
 
+#define navigation_bar_height ((CGFloat) 64)
 
-@interface MBXViewController ()
+@interface MBXViewController ()<SWRevealViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic) MBXRasterTileOverlay *rasterOverlay;
@@ -94,10 +95,16 @@
     [_mapView addOverlay:_rasterOverlay];
     
     //----------------------------------------------------------------------------------------------------------------------------------
+    
+    self.view.backgroundColor = [UIColor greenColor];
+    
+    for (UIView *view in self.navigationController.navigationBar.subviews) {
+        view.alpha = 0.9;
+    }
+    
     [self configureSliderMenu];
     
     isAnnotastionSelected = NO;
-    
     
     NSDictionary *dic1 = @{ @"long":@40.19,
                            @"lat":@44.29,
@@ -157,6 +164,7 @@
 -(void)configureSliderMenu
 {
     SWRevealViewController *revealViewController = self.revealViewController;
+    revealViewController.delegate = self;
     if( revealViewController )
     {
         [self.sideBarButton setTarget:self.revealViewController];
@@ -177,7 +185,7 @@
     _pageViewController.dataSource = self;
     _pageViewController.delegate = self;
     
-    _pageViewController.view.frame = CGRectMake(0, self.view.frame.size.height, laynutyun, self.view.frame.size.height);
+    _pageViewController.view.frame = CGRectMake(0, self.view.frame.size.height, laynutyun, self.view.frame.size.height-navigation_bar_height);
     
     
     SliderViewController *initialViewController = [self viewControllerWithAnnotation:ann];
@@ -223,13 +231,13 @@
 
 -(void)panGestureRecognizerAction:(UIPanGestureRecognizer*)pan//----------------------------------PAN Gesture Action----------------
 {
-    NSLog(@"class`` %hhd",[pan.view isMemberOfClass:[SliderViewController class]]);
+ //   NSLog(@"class`` %hhd",[pan.view isMemberOfClass:[SliderViewController class]]);
     
-    SliderViewController *view=(SliderViewController*)pan.view;
-    
-    NSLog(@"supercalss` %@", pan.view.superclass);
+ //   NSLog(@"supercalss` %@", pan.view);
     
   //  UIImage *img = view.homeImageView.image;
+    
+    [pan.view superclass];
     
     switch (pan.state) {
         case UIGestureRecognizerStateBegan:
@@ -246,7 +254,7 @@
         }
         case UIGestureRecognizerStateChanged:
         {
-            if(pan.view.frame.origin.y<0)
+            if(pan.view.frame.origin.y<navigation_bar_height)
             {
                 break;
             }
@@ -272,17 +280,23 @@
                     pan.view.frame = CGRectMake(0, self.view.frame.size.height, pan.view.frame.size.width, bardzrutyun);
                     hidden = YES;
                 }else{
-                    if ( up ? (pan.view.frame.origin.y+bardzrutyun > self.view.frame.size.height/2) : (pan.view.frame.origin.y > self.view.frame.size.height/2) )
+                    if ( up ? (pan.view.frame.origin.y+bardzrutyun > (self.view.frame.size.height-navigation_bar_height)/2) : (pan.view.frame.origin.y > self.view.frame.size.height-navigation_bar_height/2) )
                     {
                         up = NO;
                         pan.view.frame = CGRectMake(0, self.view.frame.size.height - bardzrutyun, pan.view.frame.size.width,pan.view.frame.size.height);
                     }else{
                         up = YES;
-                        pan.view.frame = CGRectMake(0, 0, pan.view.frame.size.width, self.view.frame.size.height);
+                        pan.view.frame = CGRectMake(0, navigation_bar_height, pan.view.frame.size.width, pan.view.frame.size.height);
                         
                     
                     }
                 }
+                
+                SliderViewController *sliderView=(SliderViewController*)[_pageViewController.viewControllers lastObject];
+                sliderView.up=up;
+                
+                
+                
             } completion:^(BOOL finished){
                 
                 if(up){
@@ -338,7 +352,7 @@
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed{
     
-    NSLog(@"Current Page = %@", pageViewController.viewControllers);
+//    NSLog(@"Current Page = %@", pageViewController.viewControllers);
     
  //   SliderViewController *currentView = [pageViewController.viewControllers lastObject];
     
@@ -347,8 +361,7 @@
     if( ![_mapView viewForAnnotation:currentView.annotation].selected )
         [_mapView selectAnnotation:currentView.annotation animated:NO];
     */
-    
-    
+
     
 }
 
@@ -357,7 +370,8 @@
     if( ![_mapView viewForAnnotation:ann].selected )
     {
         [_mapView selectAnnotation:ann animated:NO];
-        [_mapView mbx_setCenterCoordinate:ann.coordinate zoomLevel:[_mapView mbx_zoomLevel] animated:YES];
+  //      [_mapView mbx_setCenterCoordinate:ann.coordinate zoomLevel:[_mapView mbx_zoomLevel] animated:YES];
+        [_mapView mbx_setCenterCoordinate:ann.coordinate animated:YES];
         //change mapView region
     }
     
@@ -486,6 +500,45 @@
         return view;
     }*/
     return nil;
+}
+
+#pragma mark - SWRevealViewControllerDelegate
+
+-(void)revealController:(SWRevealViewController *)revealController animateToPosition:(FrontViewPosition)position
+{
+    switch (position) {
+        case FrontViewPositionLeftSideMostRemoved:
+            NSLog(@"FrontViewPositionLeftSideMostRemoved");
+            break;
+        case FrontViewPositionLeftSide:
+            NSLog(@"FrontViewPositionLeftSide");
+            break;
+        case FrontViewPositionLeftSideMost:
+            NSLog(@"FrontViewPositionLeftSideMost");
+            break;
+        case FrontViewPositionLeft:
+        {
+            _mapView.userInteractionEnabled = YES;
+            NSLog(@"FrontViewPositionLeft");
+            break;
+        }
+        case FrontViewPositionRight:
+        {
+            _mapView.userInteractionEnabled = NO;
+            NSLog(@"FrontViewPositionRight");
+            break;
+        }
+        case FrontViewPositionRightMost:
+            NSLog(@"FrontViewPositionRightMost");
+            break;
+        case FrontViewPositionRightMostRemoved:
+            NSLog(@"FrontViewPositionRightMostRemoved");
+            break;
+            
+        default:
+            break;
+    }
+    
 }
 
 

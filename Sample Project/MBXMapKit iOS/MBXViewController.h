@@ -13,4 +13,5 @@
 @interface MBXViewController : UIViewController <MKMapViewDelegate, MBXRasterTileOverlayDelegate, UIPageViewControllerDataSource,UIPageViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sideBarButton;
+
 @end

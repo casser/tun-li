@@ -15,4 +15,6 @@
 
 @property (strong, nonatomic) MBXPointAnnotation *annotation;
 
+@property (nonatomic) BOOL up;
+
 @end

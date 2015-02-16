@@ -24,8 +24,15 @@ NSString *const MBXMapKitVersion = @"0.5.0";
 - (void)mbx_setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate zoomLevel:(NSUInteger)zoomLevel animated:(BOOL)animated
 {
     zoomLevel = zoomLevel > 20 ? 20 : zoomLevel;
-
+    
     MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, MKCoordinateSpanMake(0, 360 / (pow(2, zoomLevel) * (self.frame.size.width / 256))));
+    [self setRegion:region animated:animated];
+}
+
+- (void)mbx_setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate animated:(BOOL)animated
+{
+    MKCoordinateRegion region = self.region;
+    region.center = centerCoordinate;
     [self setRegion:region animated:animated];
 }
 

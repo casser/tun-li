@@ -24,6 +24,7 @@
 		EF02D1FF1A88D720008D4195 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF02D1FE1A88D720008D4195 /* SWRevealViewController.m */; };
 		EF02D2031A88DEE7008D4195 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF02D2021A88DEE7008D4195 /* MenuViewController.m */; };
 		EF02D2071A88E490008D4195 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF02D2061A88E490008D4195 /* HomeViewController.m */; };
+		EF63CAB61A9206DC00163717 /* UIImageSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF63CAB51A9206DC00163717 /* UIImageSliderViewController.m */; };
 		EFD04C921A67C87300FDB70B /* home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C8F1A67C87300FDB70B /* home@2x.png */; };
 		EFD04C931A67C87300FDB70B /* home@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C901A67C87300FDB70B /* home@1x.png */; };
 		EFD04C941A67C87300FDB70B /* home@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFD04C911A67C87300FDB70B /* home@3x.png */; };
@@ -68,6 +69,8 @@
 		EF02D2021A88DEE7008D4195 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		EF02D2051A88E490008D4195 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		EF02D2061A88E490008D4195 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		EF63CAB41A9206DC00163717 /* UIImageSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageSliderViewController.h; sourceTree = "<group>"; };
+		EF63CAB51A9206DC00163717 /* UIImageSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageSliderViewController.m; sourceTree = "<group>"; };
 		EFD04C8F1A67C87300FDB70B /* home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@2x.png"; sourceTree = "<group>"; };
 		EFD04C901A67C87300FDB70B /* home@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@1x.png"; sourceTree = "<group>"; };
 		EFD04C911A67C87300FDB70B /* home@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home@3x.png"; sourceTree = "<group>"; };
@@ -197,6 +200,8 @@
 				EFD04CD61A69484F00FDB70B /* SliderViewController.m */,
 				EF02D2011A88DEE7008D4195 /* MenuViewController.h */,
 				EF02D2021A88DEE7008D4195 /* MenuViewController.m */,
+				EF63CAB41A9206DC00163717 /* UIImageSliderViewController.h */,
+				EF63CAB51A9206DC00163717 /* UIImageSliderViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -316,6 +321,7 @@
 				012A0DB81909D5FC005B69D7 /* MBXMapKit.m in Sources */,
 				012A0DB91909D5FC005B69D7 /* MBXOfflineMapDatabase.m in Sources */,
 				012A0DBA1909D5FC005B69D7 /* MBXOfflineMapDownloader.m in Sources */,
+				EF63CAB61A9206DC00163717 /* UIImageSliderViewController.m in Sources */,
 				012A0DBB1909D5FC005B69D7 /* MBXPointAnnotation.m in Sources */,
 				012A0DBC1909D5FC005B69D7 /* MBXRasterTileOverlay.m in Sources */,
 				EFD04CD71A69484F00FDB70B /* SliderViewController.m in Sources */,
